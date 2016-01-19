@@ -79,7 +79,7 @@ def main():
                         message = get_message(line)
                         print(sender + ": " + message)
                         parse_message(message)
-            # sleep(1 / (20 / 30))
+            sleep(1 / (20 / 30))
 
         except socket.error:
             print("Socket died")
