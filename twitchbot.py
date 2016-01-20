@@ -19,13 +19,7 @@ with open("wordfilter.txt", "r") as file:
 
 
 def get_sender(msg):
-    result = ""
-    for c in msg:
-        if c == '!':
-            break
-        if c != ':':
-            result += c
-    return result
+    return msg.split('!', 1)[0][1:]
 
 
 def get_message(msg):
