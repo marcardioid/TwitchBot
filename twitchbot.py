@@ -14,6 +14,9 @@ CHAN = config["IRC"]["CHAN"]
 NICK = config["IRC"]["NICK"]
 PASS = config["IRC"]["PASS"]
 
+with open("wordfilter.txt", "r") as file:
+    wordfilter = set([word.strip() for word in file.read().splitlines()])
+
 
 def get_sender(msg):
     result = ""
@@ -35,13 +38,20 @@ def get_message(msg):
     return result.lstrip(':')
 
 
-def parse_message(msg):
-    if len(msg) >= 1:
-        msg = msg.split()
+def parse_message(line):
+    sender = get_sender(line[0])
+    message = get_message(line)
+    print(sender + ": " + message)
+    if len(message) >= 1:
+        words = message.split()
         options = {"!test": command_test,
                    "!derp": command_derp}
-        if msg[0] in options:
-            options[msg[0]]()
+        if any(m.lower() in wordfilter for m in words):
+            irc.timeout(CHAN, sender)
+            print("SYS: TIMED OUT {}".format(sender.upper()))
+            return
+        if words[0] in options:
+            options[words[0]]()
 
 
 def command_test():
@@ -75,10 +85,7 @@ def main():
                     if line[0] == "PING":
                         irc.send_pong(line[1])
                     if line[1] == "PRIVMSG":
-                        sender = get_sender(line[0])
-                        message = get_message(line)
-                        print(sender + ": " + message)
-                        parse_message(message)
+                        parse_message(line)
             sleep(1 / (20 / 30))
 
         except socket.error:
@@ -92,7 +99,7 @@ def main():
 
     irc.disconnect()
 
-    # send_message(CHAN, ".me A WILD BOT LEFT THE CHAT!")
+    # irc.send_message(CHAN, ".me A WILD BOT LEFT THE CHAT!")
     print("SYS: A WILD BOT LEFT THE CHAT!")
 
 
