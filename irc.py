@@ -43,5 +43,9 @@ def part_channel(chan):
     con.send(bytes("PART {}\r\n".format(chan), "UTF-8"))
 
 
+def ban(chan, user):
+    send_message(chan, ".ban {}".format(user))
+
+
 def timeout(chan, user, time=1):
     send_message(chan, ".timeout {} {}".format(user, time))
