@@ -52,7 +52,7 @@ def command_derp(args):
 
 def command_sum(args):
     try:
-        irc.send_message(CHAN, "{} = {}".format('+'.join(args), sum([int(a) for a in args])))
+        irc.send_message(CHAN, "{} = {}".format(" + ".join(args), sum([int(a) for a in args])))
     except ValueError:
         return
     irc.send_message(CHAN, "")
