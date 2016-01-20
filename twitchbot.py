@@ -23,18 +23,12 @@ def get_sender(msg):
 
 
 def get_message(msg):
-    result = ""
-    i = 3
-    length = len(msg)
-    while i < length:
-        result += msg[i] + ' '
-        i += 1
-    return result.lstrip(':')
+    return ' '.join([msg[0][1:]] + msg[1:])
 
 
 def parse_message(line):
     sender = get_sender(line[0])
-    message = get_message(line)
+    message = get_message(line[3:])
     print(sender + ": " + message)
     if len(message) >= 1:
         words = message.split()

@@ -11,7 +11,7 @@ def connect(host, port):
 
 
 def disconnect():
-    con.shutdown()
+    con.shutdown(socket.SHUT_RDWR)
     con.close()
 
 
