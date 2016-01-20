@@ -32,22 +32,34 @@ def parse_message(line):
     print(sender + ": " + message)
     if len(message) >= 1:
         words = message.split()
-        options = {"!test": command_test,
-                   "!derp": command_derp}
-        if any(m.lower() in wordfilter for m in words):
+        commands = {"!derp": command_derp,
+                    "!sum": command_sum,
+                    "!test": command_test}
+        if any(w.lower() in wordfilter for w in words):
             irc.timeout(CHAN, sender)
             print("SYS: TIMED OUT {}".format(sender.upper()))
             return
-        if words[0] in options:
-            options[words[0]]()
+        if words[0] in commands:
+            if len(words) > 1:
+                commands[words[0]](words[1:])
+            else:
+                commands[words[0]]()
 
 
-def command_test():
-    irc.send_message(CHAN, "testing some stuff")
-
-
-def command_derp():
+def command_derp(args):
     irc.send_message(CHAN, "derp yourself")
+
+
+def command_sum(args):
+    try:
+        irc.send_message(CHAN, "{} = {}".format('+'.join(args), sum([int(a) for a in args])))
+    except ValueError:
+        return
+    irc.send_message(CHAN, "")
+
+
+def command_test(args):
+    irc.send_message(CHAN, "testing some stuff")
 
 
 def main():
