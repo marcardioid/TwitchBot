@@ -19,14 +19,17 @@ with open("wordfilter.txt", "r") as file:
 
 
 def get_sender(msg):
+    """Return message sender."""
     return msg.split('!', 1)[0][1:]
 
 
 def get_message(msg):
+    """Return message."""
     return ' '.join([msg[0][1:]] + msg[1:])
 
 
 def parse_message(line):
+    """Parse message. Filters message. Executes message command."""
     sender = get_sender(line[0])
     message = get_message(line[3:])
     print(sender + ": " + message)
@@ -47,10 +50,12 @@ def parse_message(line):
 
 
 def command_derp(args):
+    """Send derp to IRC."""
     irc.send_message(CHAN, "derp yourself")
 
 
 def command_sum(args):
+    """Send the sum of the arguments to IRC."""
     try:
         irc.send_message(CHAN, "{} = {}".format(" + ".join(args), sum([int(a) for a in args])))
     except ValueError:
@@ -59,6 +64,7 @@ def command_sum(args):
 
 
 def command_test(args):
+    """Send test to IRC."""
     irc.send_message(CHAN, "testing some stuff")
 
 
